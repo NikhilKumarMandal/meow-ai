@@ -33,8 +33,6 @@ export async function runPlanMode(): Promise<void> {
       (v?.trim().length ?? 0) > 3 ? undefined : "Describe the expected outcome",
   });
 
-
-
   const type = await clackSelect<ProjectType>({
     message: "Project type:",
     options: [

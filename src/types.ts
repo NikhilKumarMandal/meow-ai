@@ -40,6 +40,7 @@ export interface Phase {
 
 export interface PhaseQuery {
   goal: string;
+  constraints?: string;
   expectedOutcome: string;
   type: ProjectType;
   context: ContextItem[];

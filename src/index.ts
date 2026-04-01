@@ -47,11 +47,6 @@ async function runInteractiveMenu(): Promise<void> {
         value: "plan",
       },
       {
-        label: chalk.bold("2.  Review Mode"),
-        hint: "Agentic code review — Bug · Security · Performance · Clarity",
-        value: "review",
-      },
-      {
         label: chalk.bold("3.  Phase Mode"),
         hint: "Break a complex goal into iterative, validated phases",
         value: "phase",

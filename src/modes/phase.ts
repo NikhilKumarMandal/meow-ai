@@ -297,9 +297,18 @@ async function phaseOverviewMenu(breakdown: PhaseBreakdown): Promise<void> {
   });
 
   if (action === "start") {
+    await workThroughPhases(breakdown);
   } else if (action === "edit") {
+    await editPhasesMenu(breakdown);
   } else if (action === "regen") {
+    p.log.info('Re-generating phase breakdown…');
+    await generatePhases(breakdown.query);
   } else if (action === "export") {
+    const filename = await clackText({ message: 'Filename:', placeholder: `phases-${breakdown.id}.md` });
+    const out = filename.trim() || `phases-${breakdown.id}.md`;
+    writeFileSync(out, buildPhasesMarkdown(breakdown), 'utf8');
+    p.log.success(`Saved to ${out}`);
+    await phaseOverviewMenu(breakdown);
   }
 }
 

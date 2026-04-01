@@ -148,9 +148,6 @@ async function planActionMenu(
   query: PlanQuery
 ): Promise<void> {
   divider();
-  step(3, "Execute in Agent");
-  console.log();
-  p.log.info("Copy this plan into your preferred coding agent:");
 
   const action = await clackSelect<string>({
     message: "What next?",

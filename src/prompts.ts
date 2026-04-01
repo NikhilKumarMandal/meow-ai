@@ -126,3 +126,76 @@ Rules:
 - validationCriteria must be concrete and testable.
 - dependencies is an array of phase numbers (e.g. [1, 2]).`;
 }
+
+export function buildPhaseBreakdownUserPrompt(
+  query: import("./types.js").PhaseQuery
+): string {
+  const parts = [
+    `Goal: ${query.goal}`,
+    `Expected outcome: ${query.expectedOutcome}`,
+  ];
+  if (query.constraints) parts.push(`Constraints: ${query.constraints}`);
+  if (query.stack) parts.push(`Tech stack: ${query.stack}`);
+  parts.push(`Project type: ${query.type}`);
+  if (query.context.length > 0) {
+    parts.push("\n--- Context ---");
+    for (const ctx of query.context) {
+      parts.push(`[${ctx.type.toUpperCase()}] ${ctx.label}:\n${ctx.content}`);
+    }
+  }
+  return parts.join("\n");
+}
+
+export function buildPhasePlanSystemPrompt(): string {
+  return `You are a senior software architect. Generate a detailed, actionable implementation plan for a single phase of a larger project.
+
+Use this EXACT markdown structure:
+
+## Phase Goal
+[What this phase achieves]
+
+## Directory Structure
+\`\`\`
+[Files created or modified in this phase only]
+\`\`\`
+
+## File-Level Plan
+### \`path/to/file.ts\`
+**Purpose:** [one sentence]
+**Symbols:**
+- \`functionName(param: Type): ReturnType\` — [description]
+
+## Implementation Steps
+[Numbered, ordered, concrete actions]
+
+## Dependencies
+[npm install commands, if any new ones needed]
+
+## Validation Checklist
+- [ ] [how to confirm this phase works]
+
+Be precise. Only include what belongs to THIS phase — not future phases.`;
+}
+
+export function buildPhasePlanUserPrompt(
+  phase: import("./types.js").Phase,
+  query: import("./types.js").PhaseQuery,
+  previousPhases: import("./types.js").Phase[]
+): string {
+  const parts = [
+    `Overall goal: ${query.goal}`,
+    `Tech stack: ${query.stack || "AI to decide"}`,
+    `Project type: ${query.type}`,
+    `\nPhase ${phase.number}: ${phase.title}`,
+    `Phase goal: ${phase.goal}`,
+    `Phase steps: ${phase.steps.join(", ")}`,
+    `Validation: ${phase.validationCriteria.join(", ")}`,
+  ];
+  if (previousPhases.length > 0) {
+    parts.push("\nCompleted phases (already built):");
+    for (const p of previousPhases) {
+      parts.push(`  Phase ${p.number}: ${p.title} — ${p.goal}`);
+    }
+  }
+  return parts.join("\n");
+}

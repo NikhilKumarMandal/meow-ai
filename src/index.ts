@@ -7,6 +7,7 @@ import { clackSelect, showBanner } from "./ui";
 import { AppMode } from "./types";
 import { config } from "dotenv";
 import { runPlanMode } from "./modes/plan";
+import { runPhaseMode } from "./modes/phase";
 
 config();
 
@@ -61,6 +62,7 @@ async function runInteractiveMenu(): Promise<void> {
   console.log();
 
   if (mode === "plan") await runPlanMode();
+  else if (mode === "phase") await runPhaseMode();
 
   p.outro(chalk.dim("Done · run Mewoo again to continue"));
 }

@@ -33,15 +33,7 @@ export async function runPlanMode(): Promise<void> {
       (v?.trim().length ?? 0) > 3 ? undefined : "Describe the expected outcome",
   });
 
-  const constraints = await clackText({
-    message: 'Constraints (optional — e.g. "serverless, no DB"):',
-    placeholder: "Leave blank if none",
-  });
 
-  const stack = await clackText({
-    message: "Tech stack (leave blank for AI to decide):",
-    placeholder: "e.g. Next.js, Prisma, Tailwind",
-  });
 
   const type = await clackSelect<ProjectType>({
     message: "Project type:",
@@ -78,8 +70,6 @@ export async function runPlanMode(): Promise<void> {
   const query: PlanQuery = {
     goal,
     expectedOutcome,
-    constraints,
-    stack,
     type,
     depth,
     context,

@@ -52,15 +52,6 @@ export async function runPhaseMode(): Promise<void> {
       (v?.trim().length ?? 0) > 3 ? undefined : "Describe the outcome",
   });
 
-  const constraints = await clackText({
-    message: "Constraints (optional):",
-    placeholder: 'e.g. "must be serverless", "no paid services"',
-  });
-
-  const stack = await clackText({
-    message: "Tech stack (leave blank for AI to decide):",
-    placeholder: "e.g. Next.js, Prisma, Tailwind",
-  });
 
   const type = await clackSelect<ProjectType>({
     message: "Project type:",
@@ -83,8 +74,6 @@ export async function runPhaseMode(): Promise<void> {
   const query: PhaseQuery = {
     goal,
     expectedOutcome,
-    constraints,
-    stack,
     type,
     context,
   };
@@ -108,7 +97,7 @@ async function runIntentClarification(query: PhaseQuery): Promise<void> {
     const { text } = await generateText({
       model: openai(model),
       system: buildIntentClarificationSystemPrompt(),
-      prompt: `Goal: ${query.goal}\nOutcome: ${query.expectedOutcome}\nStack: ${query.stack || "not specified"}\nType: ${query.type}\nConstraints: ${query.constraints || "none"}`,
+      prompt: `Goal: ${query.goal}\nOutcome: ${query.expectedOutcome}\nType: ${query.type}`,
       maxOutputTokens: 512,
     });
 
@@ -157,7 +146,7 @@ async function runIntentClarification(query: PhaseQuery): Promise<void> {
 
   const enrichedQuery: PhaseQuery = {
     ...query,
-    constraints: [query.constraints, clarifications].filter(Boolean).join("\n"),
+    //constraints: [query.constraints, clarifications].filter(Boolean).join("\n"),
   };
 
   await generatePhases(enrichedQuery);
@@ -726,7 +715,6 @@ function buildPhasesMarkdown(breakdown: PhaseBreakdown): string {
     "|-------|-------|",
     `| Generated | ${date} |`,
     `| Goal | ${breakdown.query.goal} |`,
-    breakdown.query.stack ? `| Stack | ${breakdown.query.stack} |` : null,
     `| Phases | ${breakdown.phases.length} |`,
     "",
     "---",

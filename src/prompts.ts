@@ -64,8 +64,6 @@ export function buildPlanUserPrompt(query: PlanQuery): string {
     `Goal: ${query.goal}`,
     `Expected outcome: ${query.expectedOutcome}`,
   ];
-  if (query.constraints) parts.push(`Constraints: ${query.constraints}`);
-  if (query.stack) parts.push(`Tech stack: ${query.stack}`);
   parts.push(`Project type: ${query.type}`);
   parts.push(`Detail level: ${query.depth}`);
   if (query.context.length > 0) {
@@ -134,8 +132,6 @@ export function buildPhaseBreakdownUserPrompt(
     `Goal: ${query.goal}`,
     `Expected outcome: ${query.expectedOutcome}`,
   ];
-  if (query.constraints) parts.push(`Constraints: ${query.constraints}`);
-  if (query.stack) parts.push(`Tech stack: ${query.stack}`);
   parts.push(`Project type: ${query.type}`);
   if (query.context.length > 0) {
     parts.push("\n--- Context ---");
@@ -184,7 +180,6 @@ export function buildPhasePlanUserPrompt(
 ): string {
   const parts = [
     `Overall goal: ${query.goal}`,
-    `Tech stack: ${query.stack || "AI to decide"}`,
     `Project type: ${query.type}`,
     `\nPhase ${phase.number}: ${phase.title}`,
     `Phase goal: ${phase.goal}`,

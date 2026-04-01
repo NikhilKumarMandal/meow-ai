@@ -19,8 +19,6 @@ export interface ContextItem {
 export interface PlanQuery {
   goal: string;
   expectedOutcome: string;
-  constraints: string;
-  stack: string;
   type: ProjectType;
   depth: PlanDepth;
   context: ContextItem[];
@@ -43,8 +41,6 @@ export interface Phase {
 export interface PhaseQuery {
   goal: string;
   expectedOutcome: string;
-  constraints: string;
-  stack: string;
   type: ProjectType;
   context: ContextItem[];
 }
